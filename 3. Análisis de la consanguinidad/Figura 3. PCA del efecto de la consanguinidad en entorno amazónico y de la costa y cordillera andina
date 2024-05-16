@@ -53,7 +53,8 @@
 # Obtener el porcentaje de varianza explicada por cada componente
   var_exp <- summary(pca_result)$importance[2,]
 
-# Crear el gráfico con los límites especificados manualmente
+## Crear el gráfico con los límites especificados manualmente
+# Representar también PC1 vs. PC3 y PC2 vs. PC3
   ggplot(data = Eivecdata_RefAwa, aes(x = PC1, y = PC2, col = Poblaciones, shape = Poblaciones)) +
     geom_point() +
     scale_shape_manual(values = shapes) +
