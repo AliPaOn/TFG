@@ -30,3 +30,5 @@ merge_awa_chi_dav[!duplicated(as.list(merge_awa_chi_dav))]
 merge_final <- merge_awa_chi_dav[!duplicated(as.list(merge_awa_chi_dav))]
 setwd("/home/alu/TFG")
 write.table(merge_final, "dataF", quote = F, col.names = F, row.names = F)
+
+#Bash
