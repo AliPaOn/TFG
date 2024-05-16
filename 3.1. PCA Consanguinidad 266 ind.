@@ -1,11 +1,11 @@
 # Seleccionar directorio
 setwd("~/TFG/PCA/ggplot")
 
-# Crear _dataframe_
+# Crear dataframe
 Eigvecdat = read.table("/home/alu/TFG/PCA/ggplot/eigenvectors", col.names = c("ID", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", "PC8", "PC9", "PC10", "PC11"))
 # ELiminar la última columna usando la función subset()
 Eigvecdata <- subset(Eigvecdat, select = -c(PC11))
-# Añadir la columna de las poblaciones al _dataframe_
+# Añadir la columna de las poblaciones al dataframe
 Pops = read.table("/home/alu/TFG/PCA/ggplot/ind.txt", col.names = c("ID", "Poblaciones", "Grupos"))
 Eivecdata <- merge(Eigvecdata, Pops, by='ID')
 
