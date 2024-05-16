@@ -1,7 +1,8 @@
 ##### 1. SMARTPCA ##### 
 # Bash
 
-# Crear un archivo con la identificación de todos los individuos en formato .txt
+# Crear un archivo con la identificación de todos los individuos en formato .txt 
+
 # Crear un archivo que indique el directorio de los archivos de entrada y la ubicación para los archivos de salida. Añadir parámetros deseados.
   genotypename: /home/alu/TFG/PCA/Inputs_files/ACDfv.bed
   snpname: /home/alu/TFG/PCA/Inputs_files/ACDfv.bim
@@ -12,11 +13,13 @@
   numoutlieriter: 5
   numoutlierevec: 10
   outliersigmathresh: 4
-# Crear un archivo ejecutable para Linux 
+
+# Crear un archivo ejecutable para Linux (.sh)
   #!/bin/bash
   parfile_dir="/home/alu/TFG/PCA"
   logfile="/home/alu/TFG/PCA/outputs_smartpca"
   smartpca -p $parfile_dir/ACD.txt > $logfile/logfile
+
 
 ##### 2. Análisis de Componentes Principales con Rstudio #####
 # R
