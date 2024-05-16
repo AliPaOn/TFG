@@ -71,7 +71,7 @@ library("dplyr")
   datos_seleccionados <- Eivecdata_RefAwaZ %>%
     filter(ID %in% individuos_seleccionados)
 
-# Graficar los datos filtrados con límites especificados manualmente
+# Realizar el gráfico especificando los límites manualmente
   ggplot(data = Eivecdata_RefAwaZ, aes(x = PC1, y = PC2, col = Poblaciones, shape = Poblaciones)) +
     geom_point() +
     stat_ellipse(data = datos_seleccionados, level = 0.95) + # Las elipses deben tener el mismo color que el individuo del grupo
