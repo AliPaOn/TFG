@@ -21,7 +21,7 @@
   smartpca -p $parfile_dir/ACD.txt > $logfile/logfile
 
 
-##### 2. Análisis de Componentes Principales con Rstudio #####
+##### 2. ANÁLISIS DE COMPONENTES PRINCIPALES EN RSTUDIO #####
 # R
 
 # Establecer directorio de trabajo
