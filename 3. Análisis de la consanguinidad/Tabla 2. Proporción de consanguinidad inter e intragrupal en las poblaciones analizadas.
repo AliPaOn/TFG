@@ -10,7 +10,7 @@
 # Obtención base de datos genome
 plink --bfile Awa_Ref --genome --out GenoAwa_Ref
 
-##### 2. BASE DE DATOS DE INDENTIDAD POR DESCENDENCIA #####
+##### 2. CONFORMACIÓN BASE DE DATOS GENOME #####
 # R
 
 # Seleccionar directorio de trabajo
@@ -58,6 +58,8 @@ colnames(Aw_Rf)[5] <-"Pop2"
       Var <- Var + 1  # Si no son iguales, incrementa Var
     }
   }
+
+##### OUTPUT "Tabla 2. Base de datos genome" #####
 
 # Calcular las proporciones
   Ntotal <- nrow(Aw_Rf)
