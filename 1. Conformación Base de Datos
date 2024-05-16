@@ -1,3 +1,4 @@
+# R
 # Formación de los tres dataframe
 col_names= c('Pos','Axiom','rsID')
 Awajun = read.table('/home/alu/TFG/Extraer rsID/Comprobar posición/awajunPI.vcf', sep='\t', header=TRUE,col.names = col_names)
