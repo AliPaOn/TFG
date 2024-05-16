@@ -47,10 +47,7 @@ library(dplyr)
   ymin <- min(Eivecdata_RefAwaZ$PC2)
   ymax <- max(Eivecdata_RefAwaZ$PC2)
 
-# Calcular el mayor valor absoluto entre los límites
-  max_abs <- max(abs(c(xmin, xmax, ymin, ymax)))
-
-# Establecer los límites para que sean simétricos alrededor del mayor valor absoluto
+# Establecer los límites para que sean simétricos 
   xlim <- c(-0.067, -0.023)
   ylim <- c(-0.0110, 0.0152)
 
