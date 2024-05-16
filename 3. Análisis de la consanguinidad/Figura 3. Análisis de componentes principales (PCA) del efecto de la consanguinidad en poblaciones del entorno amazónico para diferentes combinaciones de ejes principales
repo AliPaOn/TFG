@@ -1,1 +1,71 @@
+##### 1. SMARTPCA #####
+# Bash
 
+# Crear un archivo con la identificación de todos los individuos en formato .txt
+
+# Crear un archivo que indique el directorio de los archivos de entrada y la ubicación para los archivos de salida. Añadir parámetros deseados.
+  genotypename: /home/alu/TFG/Consanguinidad/PCAs_consanguinidad/PCA_refawa/Inputs_files/Popref_awa.bed
+  snpname: /home/alu/TFG/Consanguinidad/PCAs_consanguinidad/PCA_refawa/Inputs_files/Popref_awa.bim
+  indivname: /home/alu/TFG/Consanguinidad/PCAs_consanguinidad/PCA_refawa/Inputs_files/Popref_awa.fam
+  evecoutname: /home/alu/TFG/Consanguinidad/PCAs_consanguinidad/PCA_refawa/outputs_smartpca/eigenvectors
+  evaloutname: /home/alu/TFG/Consanguinidad/PCAs_consanguinidad/PCA_refawa/outputs_smartpca/eigenvalues
+  numoutlieriter: 0
+
+# Crear un archivo ejecutable para Linux (.sh)
+  #!/bin/bash
+  parfile_dir="/home/alu/TFG/Consanguinidad/PCAs_consanguinidad/PCA_refeawa"
+  logfile="/home/alu/TFG/Consanguinidad/PCAs_consanguinidad/PCA_refeawa/outputs_smartpca"
+  smartpca -p $parfile_dir/Popref_awa.txt > $logfile/logfile
+
+
+##### 2. ANÁLISIS DE COMPONENTES PRINCIPALES EN RSTUDIO #####
+# R
+
+# Establecer directorio de trabajo
+  setwd("/home/alu/TFG/Consanguinidad/PCAs finales/Consanguinidad/PCA_refawa/ggplot")
+
+# Crear el dataframe
+  Eigvecdat_RefAwa = read.table("/home/alu/TFG/Consanguinidad/PCAs finales/Consanguinidad/PCA_refawa/ggplot/eigenvectors", col.names = c("ID", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", "PC8", "PC9", "PC10", "PC11"))
+  # ELiminar la última columna usando la función subset()
+  Eigvecdata_RefAwa <- subset(Eigvecdat_RefAwa, select = -c(PC11))
+  # Añadir la columna de las poblaciones al dataframe
+  Pops = read.table("/home/alu/TFG/Consanguinidad/PCAs finales/Consanguinidad/PCA_refawa/ggplot/ind.txt", col.names = c("ID", "Poblaciones", "Grupo"))
+    Eivecdata_RefAwa <- merge(Eigvecdata_RefAwa, Pops, by='ID')
+
+# Calcular los límites para centrar los datos
+  xmin <- min(Eivecdata_RefAwa$PC1)
+  xmax <- max(Eivecdata_RefAwa$PC1)
+  ymin <- min(Eivecdata_RefAwa$PC2)
+  ymax <- max(Eivecdata_RefAwa$PC2)
+
+# Calcular el mayor valor absoluto entre los límites
+  max_abs <- max(abs(c(xmin, xmax, ymin, ymax)))
+
+# Establecer los límites para que sean simétricos alrededor del mayor valor absoluto
+  xlim <- c(-max_abs, max_abs)
+  ylim <- c(-max_abs, max_abs)
+
+# Definir un vector de formas pch para cada población 
+  shapes <- c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25)
+
+# Realizar el análisis de componentes principales (PCA)
+  pca_result <- prcomp(Eivecdata_RefAwa[,c("PC1", "PC2")], scale. = TRUE)
+# Obtener el porcentaje de varianza explicada por cada componente
+  var_exp <- summary(pca_result)$importance[2,]
+
+# Crear el gráfico con los límites especificados manualmente
+  ggplot(data = Eivecdata_RefAwa, aes(x = PC1, y = PC2, col = Poblaciones, shape = Poblaciones)) +
+  geom_point() +
+  scale_shape_manual(values = shapes) +
+  coord_cartesian(xlim = xlim, ylim = ylim) +  # Establezco los límites manualmente
+  theme(
+    axis.line = element_line(color='black'),
+    plot.background = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.border = element_blank(),
+    panel.background = element_blank()
+  ) +
+  # Agregar etiquetas de porcentaje de varianza explicada como leyenda
+  labs(x = paste("PC1 (", round(var_exp[1] * 100, 2), "%)"),
+       y = paste("PC2 (", round(var_exp[2] * 100, 2), "%)"))
