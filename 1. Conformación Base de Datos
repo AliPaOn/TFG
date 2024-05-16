@@ -1,34 +1,68 @@
 # R
-# Formación de los tres dataframe
+
+##### 1. COMPROBAR SNPS COMUNES ENTRE LAS TRES BASES DE DATOS #####
+
+# Cargar las tres bases de datos
 col_names= c('Pos','Axiom','rsID')
-Awajun = read.table('/home/alu/TFG/Extraer rsID/Comprobar posición/awajunPI.vcf', sep='\t', header=TRUE,col.names = col_names)
-
+  Awajun = read.table('/home/alu/TFG/Extraer rsID/Comprobar posición/awajunPI.vcf', sep='\t', header=TRUE,col.names = col_names)
 col_names= c('Pos', 'Axiom')
-Chiara = read.table('/home/alu/TFG/Extraer rsID/Comprobar posición/chiaraPI.vcf', sep='\t', header=TRUE,col.names = col_names)
-
+  Chiara = read.table('/home/alu/TFG/Extraer rsID/Comprobar posición/chiaraPI.vcf', sep='\t', header=TRUE,col.names = col_names)
 col_names= c('Pos', 'rsID')
-David = read.table('/home/alu/TFG/Extraer rsID/Comprobar posición/davidPI.vcf', sep='\t', header=TRUE,col.names = col_names)
+  David = read.table('/home/alu/TFG/Extraer rsID/Comprobar posición/davidPI.vcf', sep='\t', header=TRUE,col.names = col_names)
 
-# Establezco un límite de datos de salida para que me devuelva todos los SNPs
+# Establecer un límite de datos de salida para que devuelva todos los SNPs
 options(max.print = 10000000) 
 
-# Unión de las bases de datos Awajún y de Chiara
+# Unión de las bases de datos Awajún y de Chiara B.
 merge(Awajun, Chiara, by='Pos')
 merge_awa_chi <- merge(Awajun, Chiara, by='Axiom')
 setwd("/home/alu/TFG/Extraer rsID/Versión final")
-write.table(merge_awa_chi, "datax", quote = F, col.names = F, row.names = F)
+  write.table(merge_awa_chi, "datax", quote = F, col.names = F, row.names = F)
 
-# Unión de las tres bases de datos
+# Unión de las tres bases de datos en Rstudio
 merge(merge_awa_chi, David, by='rsID')
 merge_awa_chi_dav <-merge(merge_awa_chi, David, by='rsID')
 
 # Eliminación de columnas duplicadas
-# Remove duplicated columns
 merge_awa_chi_dav[!duplicated(as.list(merge_awa_chi_dav))]
 
-# Output final
+# Imprimir resultados
 merge_final <- merge_awa_chi_dav[!duplicated(as.list(merge_awa_chi_dav))]
 setwd("/home/alu/TFG")
 write.table(merge_final, "dataF", quote = F, col.names = F, row.names = F)
 
+
+###### 2. UNIÓN DE LAS TRES BASES DE DATOS #####
+
+col_names= c('Crom','Axiom', 'D', 'Pos', 'Al', 'Alt')
+  Awajun = read.table('/home/alu/TFG/FIltrar/FIltro final/AwadataAx.bim', sep='\t', header=TRUE,col.names = col_names)
+col_names= c('Crom','Axiom', 'D', 'Pos', 'Al', 'Alt')
+  Chiara = read.table('/home/alu/TFG/FIltrar/FIltro final/CBdataAx.bim', sep='\t', header=TRUE,col.names = col_names)
+col_names= c('Crom', 'rsID', 'D', 'Pos', 'Al', 'Alt')
+  David = read.table('/home/alu/TFG/FIltrar/FIltro final/DRdata.bim', sep='\t', header=TRUE,col.names = col_names)
+
+Awajun[,2] = David$rsID
+Chiara[,2] = David$rsID
+
+# Eliminar columnas innecesarias con la función subset () 
+Awajun_BM <- subset(Awajun, select = -c(Crom, D, Pos, Al, Alt))
+Chiara_BM <- subset(Chiara, select = -c(Crom, D, Pos, Al, Alt))
+David_BM <- subset(David, select = -c (Crom, D, Pos, Al, Alt))
+
+# Las tablas son idénticas. Imprimir para juntar las tres bases de datos genómicos
+setwd("/home/alu/TFG/bmerge")
+write.table(Awajun_BM, "Awadata.txt", quote = F, col.names = F, row.names = F)
+write.table(Chiara_BM, "CBdata.txt", quote = F, col.names = F, row.names = F)
+write.table(David_BM, "DRdata.txt", quote = F, col.names = F, row.names = F)
+
+
 #Bash
+
+# Conversión a formato bed desde directorio
+plink --vcf awajun_16.vcf --make-bed --out awajun
+plink --vcf fltSouthAmericaATLAS_177ExcludeRelatives_EIGEN.recode.vcf --make-bed --out CBdata
+plink --vcf fltv54.1.p1_HO_public.recode.vcf --make-bed --out DRdata
+
+# UNIÓN DE LAS TRES BASES DE DATOS desde directorio
+plink --bfile Awadata --bmerge CBdata.bed CBdata.bim CBdata.fam --allow-extra-chr --make-bed --out AC
+plink --bfile AC --bmerge DRdata.bed DRdata.bim DRdata.fam --allow-extra-chr --make-bed --out ACD
