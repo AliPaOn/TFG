@@ -23,14 +23,14 @@
 # R
 
 # Establecer directorio de trabajo 
-  setwd("/home/alu/TFG/Consanguinidad/PCAs finales/Consanguinidad/PCA_refawa_zoom")
+  setwd("/home/alu/TFG/Consanguinidad/PCAs_finales/Consanguinidad/PCA_refawa_zoom")
 
 ## Crear el dataframe
-  Eigvecdat_RefAwa = read.table("/home/alu/TFG/Consanguinidad/PCAs finales/Consanguinidad/PCA_refawa_zoom/eigenvectors", col.names = c("ID", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", "PC8", "PC9", "PC10", "PC11"))
+  Eigvecdat_RefAwa = read.table("/home/alu/TFG/Consanguinidad/PCAs_finales/Consanguinidad/PCA_refawa_zoom/eigenvectors", col.names = c("ID", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", "PC8", "PC9", "PC10", "PC11"))
   # Eliminar la última columna usando la función subset()
   Eigvecdata_RefAwa <- subset(Eigvecdat_RefAwa, select = -c(PC11))
   # Añadir la columna de las poblaciones al dataframe
-  Pops = read.table("/home/alu/TFG/Consanguinidad/PCAs finales/Consanguinidad/PCA_refawa_zoom/ind.txt", col.names = c("ID", "Poblaciones", "Grupo"))
+  Pops = read.table("/home/alu/TFG/Consanguinidad/PCAs_finales/Consanguinidad/PCA_refawa_zoom/ind.txt", col.names = c("ID", "Poblaciones", "Grupo"))
     Eivecdata_RefAwaZ <- merge(Eigvecdata_RefAwa, Pops, by='ID')
 
 # Ordenar la base de datos por PC1 ascendente 
