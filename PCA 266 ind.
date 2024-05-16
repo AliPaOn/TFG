@@ -1,0 +1,28 @@
+# Seleccionar directorio
+setwd("~/TFG/PCA/ggplot")
+
+# Crear _dataframe_
+Eigvecdat = read.table("/home/alu/TFG/PCA/ggplot/eigenvectors", col.names = c("ID", "PC1", "PC2", "PC3", "PC4", "PC5", "PC6", "PC7", "PC8", "PC9", "PC10", "PC11"))
+# ELiminar la última columna usando la función subset()
+Eigvecdata <- subset(Eigvecdat, select = -c(PC11))
+# Añadir la columna de las poblaciones al _dataframe_
+Pops = read.table("/home/alu/TFG/PCA/ggplot/ind.txt", col.names = c("ID", "Poblaciones", "Grupos"))
+Eivecdata <- merge(Eigvecdata, Pops, by='ID')
+
+# Cálculo de los porcentajes de representación de PC1 y PC2
+pc1_var <- var(Eivecdata$PC1) / sum(var(Eivecdata[,2:11]))
+pc2_var <- var(Eivecdata$PC2) / sum(var(Eivecdata[,2:11]))
+
+# Creación del PCA
+library("ggplot2")
+plot <- ggplot(data = Eivecdata, aes(x = PC1, y = PC2)) +
+  geom_point(aes(col = Poblaciones, pch = Grupos)) +
+  theme_bw() + # Conservo los ejes
+  theme(legend.position = "right",  # Mover la leyenda a la derecha
+        panel.grid.major = element_blank(),  # Eliminar las líneas de la cuadrícula mayor
+        panel.grid.minor = element_blank()) + # Eliminar las líneas de la cuadrícula menor
+  labs(x = paste0("PC1 (", round(pc1_var * 100, 2), "%)"), # Etiqueta del eje x con el porcentaje de representación
+       y = paste0("PC2 (", round(pc2_var * 100, 2), "%)")) # Etiqueta del eje y con el porcentaje de representación
+
+# Mostrar el gráfico
+print(plot)
