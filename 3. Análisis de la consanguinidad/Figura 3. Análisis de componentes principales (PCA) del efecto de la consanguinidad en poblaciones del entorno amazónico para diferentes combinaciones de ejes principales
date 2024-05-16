@@ -55,17 +55,17 @@
 
 # Crear el gráfico con los límites especificados manualmente
   ggplot(data = Eivecdata_RefAwa, aes(x = PC1, y = PC2, col = Poblaciones, shape = Poblaciones)) +
-  geom_point() +
-  scale_shape_manual(values = shapes) +
-  coord_cartesian(xlim = xlim, ylim = ylim) +  # Establezco los límites manualmente
-  theme(
-    axis.line = element_line(color='black'),
-    plot.background = element_blank(),
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    panel.border = element_blank(),
-    panel.background = element_blank()
-  ) +
-  # Agregar etiquetas de porcentaje de varianza explicada como leyenda
-  labs(x = paste("PC1 (", round(var_exp[1] * 100, 2), "%)"),
-       y = paste("PC2 (", round(var_exp[2] * 100, 2), "%)"))
+    geom_point() +
+    scale_shape_manual(values = shapes) +
+    coord_cartesian(xlim = xlim, ylim = ylim) +  # Establezco los límites manualmente
+    theme(
+      axis.line = element_line(color='black'),
+      plot.background = element_blank(),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      panel.border = element_blank(),
+      panel.background = element_blank()
+    ) +
+    # Agregar etiquetas de porcentaje de varianza explicada como leyenda
+      labs(x = paste("PC1 (", round(var_exp[1] * 100, 2), "%)"),
+           y = paste("PC2 (", round(var_exp[2] * 100, 2), "%)"))
