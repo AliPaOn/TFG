@@ -1,0 +1,31 @@
+# Formación de las tres bases de datos 
+col_names= c('Pos','Axiom','rsID')
+Awajun = read.table('/home/alu/TFG/Extraer rsID/Comprobar posición/awajunPI.vcf', sep='\t', header=TRUE,col.names = col_names)
+
+col_names= c('Pos', 'Axiom')
+Chiara = read.table('/home/alu/TFG/Extraer rsID/Comprobar posición/chiaraPI.vcf', sep='\t', header=TRUE,col.names = col_names)
+
+col_names= c('Pos', 'rsID')
+David = read.table('/home/alu/TFG/Extraer rsID/Comprobar posición/davidPI.vcf', sep='\t', header=TRUE,col.names = col_names)
+
+# Establezco un límite de datos de salida para que me devuelva todos los SNPs
+options(max.print = 10000000) 
+
+# Unión de las bases de datos Awajún y de Chiara
+merge(Awajun, Chiara, by='Pos')
+merge_awa_chi <- merge(Awajun, Chiara, by='Axiom')
+setwd("/home/alu/TFG/Extraer rsID/Versión final")
+write.table(merge_awa_chi, "datax", quote = F, col.names = F, row.names = F)
+
+# Unión de las tres bases de datos
+merge(merge_awa_chi, David, by='rsID')
+merge_awa_chi_dav <-merge(merge_awa_chi, David, by='rsID')
+
+# Eliminación de columnas duplicadas
+# Remove duplicated columns
+merge_awa_chi_dav[!duplicated(as.list(merge_awa_chi_dav))]
+
+# Output final
+merge_final <- merge_awa_chi_dav[!duplicated(as.list(merge_awa_chi_dav))]
+setwd("/home/alu/TFG")
+write.table(merge_final, "dataF", quote = F, col.names = F, row.names = F)
