@@ -1,1 +1,545 @@
+# EXCLUSIÓN DE INDIVIDUOS EMPARENTADOS 
+# R
 
+###### 1. CARGAR BASE DE DATOS GENOME ######
+# Seleccionar directorio de trabajo
+  setwd("/home/alu/TFG/Consanguinidad/EXPLORAR/Paso_final")
+  genome <- read.table("GenoAwa_Ref.genome", h=T)
+# Comprobar que tiene el numero de lineas correcto (Nind²-Nind)/2)
+# nrow(genome)
+
+# Seleccionar las columnas necesarias y convectirlas en character
+  genome <- subset(genome, select = -c(FID1, FID2, RT, EZ, Z0, Z1, Z2, PHE, DST, PPC, RATIO))
+  genome$IID1 <- as.character(genome$IID1)
+  genome$IID2 <- as.character(genome$IID2)
+
+# Añadir columna de la población crear un vector donde guardar el grupo poblacional al que pertenece cada muestra (IID1 y IID2)
+  for (ind in c(1,2)){
+    # Generar un vector de NAs de tamaño número de líneas del dataframe
+    Grupo_IID <- rep(NA, nrow(genome))
+    Grupo_IID[grep("MG", genome[,ind])] <- "Awajun"
+    Grupo_IID[grep("PUT283", genome[,ind])] <- "Kamentsa"
+    Grupo_IID[grep("PUT288", genome[,ind])] <- "Kamentsa"
+    Grupo_IID[grep("PUT292", genome[,ind])] <- "Kamentsa"
+    Grupo_IID[grep("PUT317", genome[,ind])] <- "Kamentsa"
+    Grupo_IID[grep("PUT289", genome[,ind])] <- "Inga"
+    Grupo_IID[grep("PUT290", genome[,ind])] <- "Inga"
+    Grupo_IID[grep("PUT307", genome[,ind])] <- "Inga"
+    Grupo_IID[grep("PUT308", genome[,ind])] <- "Inga"
+    Grupo_IID[grep("PUT309", genome[,ind])] <- "Inga"
+    Grupo_IID[grep("PUT310", genome[,ind])] <- "Inga"
+    Grupo_IID[grep("PUT311", genome[,ind])] <- "Inga"
+    Grupo_IID[grep("PUT312", genome[,ind])] <- "Inga"
+    Grupo_IID[grep("PUT313", genome[,ind])] <- "Inga"
+    Grupo_IID[grep("PUT314", genome[,ind])] <- "Inga"
+    Grupo_IID[grep("PUT315", genome[,ind])] <- "Inga"
+    Grupo_IID[grep("PUT316", genome[,ind])] <- "Inga"
+    Grupo_IID[grep("PUT328", genome[,ind])] <- "Inga"
+    Grupo_IID[grep("PUT318", genome[,ind])] <- "Cofan"
+    Grupo_IID[grep("PUT319", genome[,ind])] <- "Cofan"
+    Grupo_IID[grep("PUT320", genome[,ind])] <- "Cofan"
+    Grupo_IID[grep("PUT334", genome[,ind])] <- "Cofan"
+    Grupo_IID[grep("AMZ", genome[,ind])] <- "Cocama"
+    Grupo_IID[grep("SMAR-7", genome[,ind])] <- "Cocama"
+    Grupo_IID[grep("SMAR-9", genome[,ind])] <- "Cocama"
+    Grupo_IID[grep("SMAR-10", genome[,ind])] <- "Cocama"
+    Grupo_IID[grep("EC", genome[,ind])] <- "Kichwa"
+    Grupo_IID[grep("SMAR-2", genome[,ind])] <- "Shawi"
+    Grupo_IID[grep("SMAR-3", genome[,ind])] <- "Muniche"
+    Grupo_IID[grep("SMAR-4", genome[,ind])] <- "Muniche"
+    Grupo_IID[grep("SMAR-6", genome[,ind])] <- "Chamicuro"
+    Grupo_IID[grep("CH104", genome[,ind])] <- "Wayku"
+    Grupo_IID[grep("CH105", genome[,ind])] <- "Wayku"
+    Grupo_IID[grep("CH106", genome[,ind])] <- "Wayku"
+    Grupo_IID[grep("CH107", genome[,ind])] <- "Wayku"
+    Grupo_IID[grep("CH108", genome[,ind])] <- "Wayku"
+    Grupo_IID[grep("CH109", genome[,ind])] <- "Wayku"
+    Grupo_IID[grep("CH111", genome[,ind])] <- "Wayku"
+    Grupo_IID[grep("CH112", genome[,ind])] <- "Wayku"
+    Grupo_IID[grep("CH116", genome[,ind])] <- "Wayku"
+    Grupo_IID[grep("CH117", genome[,ind])] <- "Wayku"
+    Grupo_IID[grep("TUM", genome[,ind])] <- "Tumbes"
+    Grupo_IID[grep("PIU24", genome[,ind])] <- "Narihuala"
+    Grupo_IID[grep("PIU25", genome[,ind])] <- "Narihuala"
+    Grupo_IID[grep("PIU27", genome[,ind])] <- "Narihuala"
+    Grupo_IID[grep("PIU28", genome[,ind])] <- "Narihuala"
+    Grupo_IID[grep("PIU35", genome[,ind])] <- "Narihuala"
+    Grupo_IID[grep("PIU01", genome[,ind])] <- "Tallan"
+    Grupo_IID[grep("PIU02", genome[,ind])] <- "Tallan"
+    Grupo_IID[grep("PIU04", genome[,ind])] <- "Tallan"
+    Grupo_IID[grep("PIU05", genome[,ind])] <- "Tallan"
+    Grupo_IID[grep("PIU06", genome[,ind])] <- "Tallan"
+    Grupo_IID[grep("PIU08", genome[,ind])] <- "Tallan"
+    Grupo_IID[grep("PIU11", genome[,ind])] <- "Tallan"
+    Grupo_IID[grep("PIU12", genome[,ind])] <- "Tallan"
+    Grupo_IID[grep("PIU16", genome[,ind])] <- "Sechura"
+    Grupo_IID[grep("PIU19", genome[,ind])] <- "Sechura"
+    Grupo_IID[grep("PIU21", genome[,ind])] <- "Sechura"
+    Grupo_IID[grep("PIU38", genome[,ind])] <- "Chulucanas"
+    Grupo_IID[grep("PIU39", genome[,ind])] <- "Chulucanas"
+    Grupo_IID[grep("PIU40", genome[,ind])] <- "Chulucanas"
+    Grupo_IID[grep("PIU42", genome[,ind])] <- "Chulucanas"
+    Grupo_IID[grep("PIU43", genome[,ind])] <- "Chulucanas"
+    Grupo_IID[grep("PIU45", genome[,ind])] <- "Chulucanas"
+    Grupo_IID[grep("PIU46", genome[,ind])] <- "Chulucanas"
+    Grupo_IID[grep("PIU47", genome[,ind])] <- "Chulucanas"
+    Grupo_IID[grep("LAM03", genome[,ind])] <- "Olmos"
+    Grupo_IID[grep("Lam05", genome[,ind])] <- "Olmos"
+    Grupo_IID[grep("Lam07", genome[,ind])] <- "Olmos"
+    Grupo_IID[grep("LAM08", genome[,ind])] <- "Olmos"
+    Grupo_IID[grep("LAM10", genome[,ind])] <- "Chotuna"
+    Grupo_IID[grep("LAM15", genome[,ind])] <- "Chotuna"
+    Grupo_IID[grep("LAM20", genome[,ind])] <- "Chotuna"
+    Grupo_IID[grep("LAM21", genome[,ind])] <- "Chotuna"
+    Grupo_IID[grep("LAM26", genome[,ind])] <- "Eten"
+    Grupo_IID[grep("LAM27", genome[,ind])] <- "Eten"
+    Grupo_IID[grep("LAM32", genome[,ind])] <- "Eten"
+    Grupo_IID[grep("LAM33", genome[,ind])] <- "Eten"
+    Grupo_IID[grep("LAM35", genome[,ind])] <- "Eten"
+    Grupo_IID[grep("LAL", genome[,ind])] <- "Cao"
+    Grupo_IID[grep("CH024", genome[,ind])] <- "Utcubamba"
+    Grupo_IID[grep("CH025", genome[,ind])] <- "Utcubamba"
+    Grupo_IID[grep("CH026", genome[,ind])] <- "Utcubamba"
+    Grupo_IID[grep("CH029", genome[,ind])] <- "Utcubamba"
+    Grupo_IID[grep("CH013", genome[,ind])] <- "La Jalca"
+    Grupo_IID[grep("CH014", genome[,ind])] <- "La Jalca"
+    Grupo_IID[grep("CH020", genome[,ind])] <- "La Jalca"
+    Grupo_IID[grep("CH031BIS", genome[,ind])] <- "La Jalca"
+    Grupo_IID[grep("CH033", genome[,ind])] <- "La Jalca"
+    Grupo_IID[grep("CH034", genome[,ind])] <- "La Jalca"
+    Grupo_IID[grep("CH036", genome[,ind])] <- "La Jalca"
+    Grupo_IID[grep("CH038", genome[,ind])] <- "La Jalca"
+    Grupo_IID[grep("CH039", genome[,ind])] <- "La Jalca"
+    Grupo_IID[grep("CH042", genome[,ind])] <- "La Jalca"
+    Grupo_IID[grep("CH044", genome[,ind])] <- "La Jalca"
+    Grupo_IID[grep("CH052", genome[,ind])] <- "Luya"
+    Grupo_IID[grep("CH053", genome[,ind])] <- "Luya"
+    Grupo_IID[grep("CH057", genome[,ind])] <- "Luya"
+    Grupo_IID[grep("CH062", genome[,ind])] <- "Luya"
+    Grupo_IID[grep("CH067", genome[,ind])] <- "Luya"
+    Grupo_IID[grep("CH068", genome[,ind])] <- "Luya"
+    Grupo_IID[grep("CH070", genome[,ind])] <- "Luya"
+    Grupo_IID[grep("CH071", genome[,ind])] <- "Luya"
+    Grupo_IID[grep("CH081", genome[,ind])] <- "Luya"
+    Grupo_IID[grep("CH082", genome[,ind])] <- "Luya"
+    Grupo_IID[grep("CH085", genome[,ind])] <- "Luya"
+    Grupo_IID[grep("CH008", genome[,ind])] <- "Huancas"
+    Grupo_IID[grep("CH010", genome[,ind])] <- "Huancas"
+    Grupo_IID[grep("CH011", genome[,ind])] <- "Huancas"
+    Grupo_IID[grep("CH086", genome[,ind])] <- "Huancas"
+    Grupo_IID[grep("CH089", genome[,ind])] <- "Huancas"
+    Grupo_IID[grep("LIM", genome[,ind])] <- "Paran"
+    Grupo_IID[grep("LIM", genome[,ind])] <- "Paran"
+    Grupo_IID[grep("CUS-1", genome[,ind])] <- "Cusco"
+    Grupo_IID[grep("CUS-2", genome[,ind])] <- "Cusco"
+    Grupo_IID[grep("CUS-5", genome[,ind])] <- "Cusco"
+    Grupo_IID[grep("K", genome[,ind])] <- "Cusco"
+    Grupo_IID[grep("PUN", genome[,ind])] <- "Puno"
+  
+    if (ind==1){
+      Grupo_IID1 <- Grupo_IID
+    }else if(ind==2){
+      Grupo_IID2 <- Grupo_IID
+    }
+  }
+
+# Añadir los vectores como columnas para acabar de construir el dataframe
+  genome <- tibble::add_column(genome, Grupo_IID1, .after = "IID1")
+  genome <- tibble::add_column(genome, Grupo_IID2, .after = "IID2")
+
+# Ordenar la base de datos por PI_HAT descendente 
+  genome <- genome[order(genome$PI_HAT, decreasing = T),]
+
+###### 2. EXCLUDING INDIVIDUALS ######
+# Crear vectores vacíos para guardar IID, y grupo de los individuos excluidos
+  IID_vec <- c()
+  grupo_vec <- c()
+# Crear un vector con los valores umbral de PI_HAT que vamos a estudiar 
+  pi_hat_values <- c(0.5, 0.25, 0.20, 0.125, 0.05)
+
+## Iterar sobre la base de datos genome
+# PRIMER BUCLE: iterar sobre los valores de PI_HAT dentro del vector. Cada iteración va a tomar un valor de PI_HAT umbral diferente
+  for (pi in pi_hat_values){
+    # SEGUNDO BUCLE: iterar una primera vez sobre las lineas de la base de datos genome (para pares de individuos que pertenezcan a grupos diferenetes)
+    for (row in 1:nrow(genome)) {
+      # se definen las columnas como variables:
+      ind_1 <- genome[row, "IID1"] # original label del individuo 1 de la pareja
+      grupo_1 <- genome[row, "Grupo_IID1"] # grupo poblacional del ind.1 
+      ind_2 <- genome[row, "IID2"] # original label del individuo 2 de la pareja
+      grupo_2 <- genome[row, "Grupo_IID2"] # grupo poblacional del ind.2 
+      pi_hat <- genome[row,"PI_HAT"]  # pi_hat
+      # Por cada linea de la base de datos se hacen una serie de preguntas: 
+      # PRIMERA pregunta: la consanguinidad es mayor o igual al umbral?
+      if (pi_hat >= pi){ # si la respuesta es sí, se pasa a la SEGUNDA pregunta:
+        # SEGUNDA pregunta: ninguno de los dos individuos esta eliminado?
+        if (!(ind_1 %in% IID_vec) & !(ind_2 %in% IID_vec)){ # si la respuesta es sí, se pasa a la TERCERA pregunta:
+          # TERCERA pregunta: los individuos pertenecen a distinto grupo poblacional?
+          if (grupo_1!=grupo_2){# si la respuesta es si, se aplica el criterio de la jerarquia de grupo{
+            # 1. Kichwa (N=17)
+            if (grupo_1=="Kichwa" | grupo_2=="Kichwa"){
+              # guardar el ID original del individuo eliminado
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Kichwa")])
+              # guardar el grupo poblacional del individuo eliminado
+              grupo_vec <- append(grupo_vec, "Kichwa")
+              next
+            }
+            # 2. Awajun (N=14)  
+            if(grupo_1=="Awajun" | grupo_2=="Awajun"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Awajun")])
+              grupo_vec <- append(grupo_vec, "Awajun")
+              next
+            }
+            # 3. Inga (N=13)
+            if(grupo_1=="Inga" | grupo_2=="Inga"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Inga")])
+              grupo_vec <- append(grupo_vec, "Inga")
+              next
+            }
+            # 4. La Jalca (N=11)
+            if(grupo_1=="La Jalca" | grupo_2=="La Jalca"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="La Jalca")])
+              grupo_vec <- append(grupo_vec, "La Jalca")
+              next
+            }
+            # 5. Luya (N=11)
+            if(grupo_1=="Luya" | grupo_2=="Luya"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Luya")])
+              grupo_vec <- append(grupo_vec, "Luya")
+              next
+            }
+            # 6. Wayku (N=10)
+            if(grupo_1=="Wayku" | grupo_2=="Wayku"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Wayku")])
+              grupo_vec <- append(grupo_vec, "Wayku")
+              next
+            }
+            # 7. Cao (N=10)
+            if(grupo_1=="Cao" | grupo_2=="Cao"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Cao")])
+              grupo_vec <- append(grupo_vec, "Cao")
+              next
+            }
+            # 8. Cusco (N=10)
+            if(grupo_1=="Cusco" | grupo_2=="Cusco"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Cusco")])
+              grupo_vec <- append(grupo_vec, "Cusco")
+              next
+            }
+            # 9. Cocama (N=10)
+            if(grupo_1=="Cocama" | grupo_2=="Cocama"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Cocama")])
+              grupo_vec <- append(grupo_vec, "Cocama")
+              next
+            }
+            # 10. Tumbes (N=8)
+            if(grupo_1=="Tumbes" | grupo_2=="Tumbes"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Tumbes")])
+              grupo_vec <- append(grupo_vec, "Tumbes")
+              next
+            }
+            # 11. Tallan (N=8)
+            if(grupo_1=="Tallan" | grupo_2=="Tallan"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Tallan")])
+              grupo_vec <- append(grupo_vec, "Tallan")
+              next
+            }
+            # 12. Chulucanas (N=8)
+            if(grupo_1=="Chulucanas" | grupo_2=="Chulucanas"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Chulucanas")])
+              grupo_vec <- append(grupo_vec, "Chulucanas")
+              next
+            }
+            # 13. Puno (N=7)
+            if(grupo_1=="Puno" | grupo_2=="Puno"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Puno")])
+              grupo_vec <- append(grupo_vec, "Puno")
+              next
+            }
+            # 14. Narihuala (N=5)
+            if(grupo_1=="Narihuala" | grupo_2=="Narihuala"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Narihuala")])
+              grupo_vec <- append(grupo_vec, "Narihuala")
+              next
+            }
+            # 15. Eten (N=5)
+            if(grupo_1=="Eten" | grupo_2=="Eten"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Eten")])
+              grupo_vec <- append(grupo_vec, "Eten")
+              next
+            }
+            # 16. Huancas (N=5)
+            if(grupo_1=="Huancas" | grupo_2=="Huancas"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Huancas")])
+              grupo_vec <- append(grupo_vec, "Huancas")
+              next
+            }
+            # 17. Kamentsa (N=4)
+            if(grupo_1=="Kamentsa" | grupo_2=="Kamentsa"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Kamentsa")])
+              grupo_vec <- append(grupo_vec, "Kamentsa")
+              next
+            }
+            # 18. Olmos (N=4)
+            if(grupo_1=="Olmos" | grupo_2=="Olmos"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Olmos")])
+              grupo_vec <- append(grupo_vec, "Olmos")
+              next
+            }
+            # 19. Chotuna (N=4)
+            if(grupo_1=="Chotuna" | grupo_2=="Chotuna"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Chotuna")])
+              grupo_vec <- append(grupo_vec, "Chotuna")
+              next
+            }
+            # 20. Utcubamba (N=4)
+            if(grupo_1=="Utcubamba" | grupo_2=="Utcubamba"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Utcubamba")])
+              grupo_vec <- append(grupo_vec, "Utcubamba")
+              next
+            }
+            # 21. Cofan (N=4)
+            if(grupo_1=="Cofan" | grupo_2=="Cofan"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Cofan")])
+              grupo_vec <- append(grupo_vec, "Cofan")
+              next
+            }
+            # 22. Sechura (N=3)
+            if(grupo_1=="Sechura" | grupo_2=="Sechura"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Sechura")])
+              grupo_vec <- append(grupo_vec, "Sechura")
+              next
+            }
+            # 23. Paran (N=3)
+            if(grupo_1=="Paran" | grupo_2=="Paran"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Paran")])
+              grupo_vec <- append(grupo_vec, "Paran")
+              next
+            }
+            # 24. Muniche (N=2)
+            if(grupo_1=="Muniche" | grupo_2=="Muniche"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Muniche")])
+              grupo_vec <- append(grupo_vec, "Muniche")
+              next
+            }
+            # 25. Shawi (N=1)
+            if(grupo_1=="Shawi" | grupo_2=="Shawi"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Shawi")])
+              grupo_vec <- append(grupo_vec, "Shawi")
+              next
+            }
+            # 26. Chamicuro (N=1)
+            if(grupo_1=="Chamicuro" | grupo_2=="Chamicuro"){
+              IID_vec <- append(IID_vec, c(ind_1, ind_2)[which(c(grupo_1, grupo_2)=="Chamicuro")])
+              grupo_vec <- append(grupo_vec, "Chamicuro")
+              next
+            }
+          }else if(grupo_1==grupo_2){ # TERCERA pregunta: si la respuesta es no, se selecciona un individuo al azar para eliminarlo
+            # definir el individuo aleatorio a eliminar 
+            toremove <- sample(x=c(ind_1,ind_2), size = 1)
+            # guardar el ID del individuo que corresponde a ese grupo a eliminar 
+            IID_vec <- append(IID_vec, toremove)
+            # guardar el grupo a eliminar 
+            grupo_vec <- append(grupo_vec, grupo_1)
+          } 
+        
+        }else { # SEGUNDA pregunta: si la respuesta es no, se pasa a la siguiente línea
+          next
+        }
+      }else { # PRIMERA pregunta:si la respuesta es no, se pasa a la siguiente línea
+      next
+      }
+    }
+    # Después de correr el bucle para cada valor de pi_hat se guarda la lista de excluidos según cada caso 
+    if(pi==0.5){
+      IID_0.5 <- IID_vec
+      grupo_vec_0.5 <- grupo_vec
+    }else if (pi==0.25){
+      IID_0.25 <- IID_vec
+      grupo_vec_0.25 <- grupo_vec
+    }else if (pi==0.20){
+      IID_0.20 <- IID_vec
+      grupo_vec_0.20 <- grupo_vec
+    }else if (pi==0.125){
+      IID_0.125 <- IID_vec
+      grupo_vec_0.125 <- grupo_vec
+    }else if (pi==0.05){
+      IID_0.05 <- IID_vec
+      grupo_vec_0.05 <- grupo_vec
+    }
+  }
+
+###### 3. RESULTADOS ######
+# Guardar lista de excluidos en cada caso
+  setwd("/home/alu/TFG/Consanguinidad/EXPLORAR/Paso_final/Excluded_ind2")
+  write.table(x = IID_0.5, file = "excluded_list_0.5.txt", quote = FALSE, row.names = FALSE, col.names = FALSE)
+  write.table(x = IID_0.25, file = "excluded_list_0.25.txt", quote = FALSE, row.names = FALSE, col.names = FALSE)
+  write.table(x = IID_0.20, file = "excluded_list_0.20.txt", quote = FALSE, row.names = FALSE, col.names = FALSE)
+  write.table(x = IID_0.125, file = "excluded_list_0.125.txt", quote = FALSE, row.names = FALSE, col.names = FALSE)
+  write.table(x = IID_0.05, file = "excluded_list_0.05.txt", quote = FALSE, row.names = FALSE, col.names = FALSE)
+
+# Guardar dataframes de individuos excluidos
+  excluded_db_0.5 <- cbind(IID_0.5, grupo_vec_0.5)
+  excluded_db_0.25 <- cbind(IID_0.25, grupo_vec_0.25)
+  excluded_db_0.20 <- cbind(IID_0.20, grupo_vec_0.20)
+  excluded_db_0.125 <- cbind(IID_0.125, grupo_vec_0.125)
+  excluded_db_0.05 <- cbind(IID_0.05, grupo_vec_0.05)
+  setwd("/home/alu/TFG/Consanguinidad/EXPLORAR/Paso_final/Excluded_ind2")
+  write.csv(x = excluded_db_0.5, file = "excluded_0.5.csv", row.names = FALSE, col.names = TRUE)
+  write.csv(x = excluded_db_0.25, file = "excluded_0.25.csv", row.names = FALSE, col.names = TRUE)
+  write.csv(x = excluded_db_0.20, file = "excluded_0.20.csv", row.names = FALSE, col.names = TRUE)
+  write.csv(x = excluded_db_0.125, file = "excluded_0.125.csv", row.names = FALSE, col.names = TRUE)
+  write.csv(x = excluded_db_0.05, file = "excluded_0.05.csv", row.names = FALSE, col.names = TRUE)
+
+# Guardar dataframes de N individuos/grupo 
+  setwd("/home/alu/TFG/Consanguinidad/EXPLORAR/Paso_final")
+  pops <- c("Total", "Kichwa", "Awajun", "Inga", "La Jalca", "Luya", "Wayku", "Cao","Cusco","Cocama","Tumbes",
+            "Tallan","Chulucanas","Puno","Narihuala", "Eten", "Huancas", "Kamentsa", "Olmos", "Chotuna", 
+            "Utcubamba", "Cofan", "Sechura", "Paran", "Muniche", "Shawi", "Chamicuro")
+  Sin_consanguinidad <- c(168,17,14,13,11,11,10,10,10,10,8,8,8,7,5,5,5,4,4,4,4,4,3,3,2,1,1)
+  excluded_db_0.5 <- as.data.frame(excluded_db_0.5)
+  PI_HAT_0.5 <- c(Sin_consanguinidad[1]-nrow(excluded_db_0.5),
+                  Sin_consanguinidad[2]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Kichwa",]),
+                  Sin_consanguinidad[3]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Awajun",]),
+                  Sin_consanguinidad[4]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Inga",]),
+                  Sin_consanguinidad[5]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "La Jalca",]),
+                  Sin_consanguinidad[6]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Luya",]),
+                  Sin_consanguinidad[7]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Wayku",]),
+                  Sin_consanguinidad[8]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Cao",]),
+                  Sin_consanguinidad[9]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Cusco",]),
+                  Sin_consanguinidad[10]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Cocama",]),
+                  Sin_consanguinidad[11]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Tumbes",]),
+                  Sin_consanguinidad[12]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Tallan",]),
+                  Sin_consanguinidad[13]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Chulucanas",]),
+                  Sin_consanguinidad[14]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Puno",]),
+                  Sin_consanguinidad[15]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Narihuala",]),
+                  Sin_consanguinidad[16]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Eten",]),
+                  Sin_consanguinidad[17]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Huancas",]),
+                  Sin_consanguinidad[18]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Kamentsa",]),
+                  Sin_consanguinidad[19]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Olmos",]),
+                  Sin_consanguinidad[20]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Chotuna",]),
+                  Sin_consanguinidad[21]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Utcubamba",]),
+                  Sin_consanguinidad[22]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Cofan",]),
+                  Sin_consanguinidad[23]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Sechura",]),
+                  Sin_consanguinidad[24]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Paran",]),
+                  Sin_consanguinidad[25]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Muniche",]),
+                  Sin_consanguinidad[26]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Shawi",]),
+                  Sin_consanguinidad[27]-nrow(excluded_db_0.5[excluded_db_0.5$grupo_vec_0.5 == "Chamicuro",]))
+  excluded_db_0.25 <- as.data.frame(excluded_db_0.25)
+  PI_HAT_0.25 <- c(Sin_consanguinidad[1]-nrow(excluded_db_0.25),
+                   Sin_consanguinidad[2]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Kichwa",]),
+                   Sin_consanguinidad[3]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Awajun",]),
+                   Sin_consanguinidad[4]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Inga",]),
+                   Sin_consanguinidad[5]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "La Jalca",]),
+                   Sin_consanguinidad[6]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Luya",]),
+                   Sin_consanguinidad[7]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Wayku",]),
+                   Sin_consanguinidad[8]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Cao",]),
+                   Sin_consanguinidad[9]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Cusco",]),
+                   Sin_consanguinidad[10]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Cocama",]),
+                   Sin_consanguinidad[11]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Tumbes",]),
+                   Sin_consanguinidad[12]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Tallan",]),
+                   Sin_consanguinidad[13]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Chulucanas",]),
+                   Sin_consanguinidad[14]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Puno",]),
+                   Sin_consanguinidad[15]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Narihuala",]),
+                   Sin_consanguinidad[16]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Eten",]),
+                   Sin_consanguinidad[17]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Huancas",]),
+                   Sin_consanguinidad[18]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Kamentsa",]),
+                   Sin_consanguinidad[19]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Olmos",]),
+                   Sin_consanguinidad[20]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Chotuna",]),
+                   Sin_consanguinidad[21]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Utcubamba",]),
+                   Sin_consanguinidad[22]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Cofan",]),
+                   Sin_consanguinidad[23]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Sechura",]),
+                   Sin_consanguinidad[24]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Paran",]),
+                   Sin_consanguinidad[25]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Muniche",]),
+                   Sin_consanguinidad[26]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Shawi",]),
+                   Sin_consanguinidad[27]-nrow(excluded_db_0.25[excluded_db_0.25$grupo_vec_0.25 == "Chamicuro",]))
+  excluded_db_0.20 <- as.data.frame(excluded_db_0.20)
+  PI_HAT_0.20 <- c(Sin_consanguinidad[1]-nrow(excluded_db_0.20),
+                    Sin_consanguinidad[2]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Kichwa",]),
+                    Sin_consanguinidad[3]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Awajun",]),
+                    Sin_consanguinidad[4]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Inga",]),
+                    Sin_consanguinidad[5]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "La Jalca",]),
+                    Sin_consanguinidad[6]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Luya",]),
+                    Sin_consanguinidad[7]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Wayku",]),
+                    Sin_consanguinidad[8]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Cao",]),
+                    Sin_consanguinidad[9]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Cusco",]),
+                    Sin_consanguinidad[10]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Cocama",]),
+                    Sin_consanguinidad[11]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Tumbes",]),
+                    Sin_consanguinidad[12]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Tallan",]),
+                    Sin_consanguinidad[13]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Chulucanas",]),
+                    Sin_consanguinidad[14]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Puno",]),
+                    Sin_consanguinidad[15]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Narihuala",]),
+                    Sin_consanguinidad[16]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Eten",]),
+                    Sin_consanguinidad[17]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Huancas",]),
+                    Sin_consanguinidad[18]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Kamentsa",]),
+                    Sin_consanguinidad[19]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Olmos",]),
+                    Sin_consanguinidad[20]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Chotuna",]),
+                    Sin_consanguinidad[21]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Utcubamba",]),
+                    Sin_consanguinidad[22]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Cofan",]),
+                    Sin_consanguinidad[23]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Sechura",]),
+                    Sin_consanguinidad[24]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Paran",]),
+                    Sin_consanguinidad[25]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Muniche",]),
+                    Sin_consanguinidad[26]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Shawi",]),
+                    Sin_consanguinidad[27]-nrow(excluded_db_0.20[excluded_db_0.20$grupo_vec_0.20 == "Chamicuro",]))
+  excluded_db_0.125 <- as.data.frame(excluded_db_0.125)
+  PI_HAT_0.125 <- c(Sin_consanguinidad[1]-nrow(excluded_db_0.125),
+                    Sin_consanguinidad[2]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Kichwa",]),
+                    Sin_consanguinidad[3]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Awajun",]),
+                    Sin_consanguinidad[4]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Inga",]),
+                    Sin_consanguinidad[5]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "La Jalca",]),
+                    Sin_consanguinidad[6]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Luya",]),
+                    Sin_consanguinidad[7]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Wayku",]),
+                    Sin_consanguinidad[8]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Cao",]),
+                    Sin_consanguinidad[9]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Cusco",]),
+                    Sin_consanguinidad[10]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Cocama",]),
+                    Sin_consanguinidad[11]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Tumbes",]),
+                    Sin_consanguinidad[12]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Tallan",]),
+                    Sin_consanguinidad[13]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Chulucanas",]),
+                    Sin_consanguinidad[14]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Puno",]),
+                    Sin_consanguinidad[15]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Narihuala",]),
+                    Sin_consanguinidad[16]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Eten",]),
+                    Sin_consanguinidad[17]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Huancas",]),
+                    Sin_consanguinidad[18]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Kamentsa",]),
+                    Sin_consanguinidad[19]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Olmos",]),
+                    Sin_consanguinidad[20]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Chotuna",]),
+                    Sin_consanguinidad[21]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Utcubamba",]),
+                    Sin_consanguinidad[22]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Cofan",]),
+                    Sin_consanguinidad[23]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Sechura",]),
+                    Sin_consanguinidad[24]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Paran",]),
+                    Sin_consanguinidad[25]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Muniche",]),
+                    Sin_consanguinidad[26]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Shawi",]),
+                    Sin_consanguinidad[27]-nrow(excluded_db_0.125[excluded_db_0.125$grupo_vec_0.125 == "Chamicuro",]))
+  excluded_db_0.05 <- as.data.frame(excluded_db_0.05)
+  PI_HAT_0.05 <- c(Sin_consanguinidad[1]-nrow(excluded_db_0.05),
+                   Sin_consanguinidad[2]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Kichwa",]),
+                   Sin_consanguinidad[3]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Awajun",]),
+                   Sin_consanguinidad[4]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Inga",]),
+                   Sin_consanguinidad[5]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "La Jalca",]),
+                   Sin_consanguinidad[6]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Luya",]),
+                   Sin_consanguinidad[7]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Wayku",]),
+                   Sin_consanguinidad[8]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Cao",]),
+                   Sin_consanguinidad[9]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Cusco",]),
+                   Sin_consanguinidad[10]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Cocama",]),
+                   Sin_consanguinidad[11]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Tumbes",]),
+                   Sin_consanguinidad[12]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Tallan",]),
+                   Sin_consanguinidad[13]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Chulucanas",]),
+                   Sin_consanguinidad[14]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Puno",]),
+                   Sin_consanguinidad[15]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Narihuala",]),
+                   Sin_consanguinidad[16]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Eten",]),
+                   Sin_consanguinidad[17]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Huancas",]),
+                   Sin_consanguinidad[18]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Kamentsa",]),
+                   Sin_consanguinidad[19]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Olmos",]),
+                   Sin_consanguinidad[20]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Chotuna",]),
+                   Sin_consanguinidad[21]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Utcubamba",]),
+                   Sin_consanguinidad[22]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Cofan",]),
+                   Sin_consanguinidad[23]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Sechura",]),
+                   Sin_consanguinidad[24]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Paran",]),
+                   Sin_consanguinidad[25]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Muniche",]),
+                   Sin_consanguinidad[26]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Shawi",]),
+                   Sin_consanguinidad[27]-nrow(excluded_db_0.05[excluded_db_0.05$grupo_vec_0.05 == "Chamicuro",]))
+
+# Conformar la base de datos entera
+  N<- cbind(Sin_consanguinidad,PI_HAT_0.5,PI_HAT_0.25,PI_HAT_0.20,PI_HAT_0.125,PI_HAT_0.05)
+  N <- as.data.frame(N)
+  rownames(N) <- pops
+# Guardar la base de datos
+  write.csv(x = N, file = "N2.csv", row.names = TRUE, col.names = TRUE)
