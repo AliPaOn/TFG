@@ -1,1 +1,65 @@
+##### 1. OBTENCIÓN DE LOS DATOS DE INDENTIDAD POR DESCENDENCIA #####
+# Bash
 
+# Filtrar individuos de interés en los datos genómicos
+  vcftools --vcf ACDfv2.vcf --keep Awa_Ref.txt --out Awa_Ref --recode
+
+# Convertir a formato bed
+  plink --vcf Awa_Ref.recode.vcf --make-bed --out Awa_Ref
+
+# Obtención tabla de identidad por descendencia
+plink --bfile Awa_Ref --genome --out GenoAwa_Ref
+
+##### 2. BASE DE DATOS DE INDENTIDAD POR DESCENDENCIA #####
+# R
+
+# Seleccionar directorio de trabajo
+setwd("/home/alu/TFG/Consanguinidad/EXPLORAR/Prop")
+
+## Creación de la tabla
+# Partir de la tabla de identidad por descendencia obtenida previamente 
+  Geno_AwRe = read.table("/home/alu/TFG/Consanguinidad/EXPLORAR/Prop/GenoAwa_Ref.txt", 
+    col.names = c("FID1", "ID1", "FID2", "ID2", "RT", "EZ", "Z0", "Z1", "Z2", "PI_HAT", "PHE", "DST", "PPC", "RATIO"))
+# Eliminar primera fila
+  Geno_AR <- Geno_AwRe[-c(1),]
+# Eliminar columnas que sobran
+  Awa_Ref <- subset(Geno_AR, select = -c(FID1, FID2, RT, EZ, Z0, Z1, Z2, PHE, DST, PPC, RATIO))
+
+# Añadir etiquetas a los individuos
+  Ind_names = read.table("/home/alu/TFG/Consanguinidad/EXPLORAR/Prop/Awa_Ref_names.txt", col.names = c("ID1", "Pop"))
+    PopAw_PopR <- merge(Awa_Ref, Ind_names, by="ID1")
+# Realizar el merge para asignar las poblaciones a las muestras en la columna ID2
+  PopsAw_Rf <- merge(PopAw_PopR, PopAw_PopR[,c("ID1", "Pop")], by.x = "ID2", by.y = "ID1", all.x = TRUE)
+
+# Eliminar filas duplicadas
+  Aw_Rf <- unique(PopsAw_Rf)
+# Renombrar columnas
+colnames(Aw_Rf)
+colnames(Aw_Rf)[4] <-"Pop1"
+colnames(Aw_Rf)[5] <-"Pop2"
+
+
+##### 3. CÁLCULO DE LA PROPORCIÓN DE CONSANGUINIDAD INTER E INTRAGRUPAL #####
+# R
+
+# Ordenar dataframe por PI_HAT y seleccionar sólo las filas de PI_HAT >= 0.125
+  Aw_Rf <- Aw_Rf[order(Aw_Rf$PI_HAT), ]
+  Aw_Rf <- subset(Aw_Rf, PI_HAT >= 0.125)
+
+# Crear una variable numérica llamada Var
+  Var <- 0
+
+# Iterar sobre las filas del dataframe
+  for (i in 1:nrow(Aw_Rf)) {
+    # Comprobar si Pop1 es igual (desigual) a Pop2
+    if (Aw_Rf$Pop1[i] != Aw_Rf$Pop2[i]) {
+      #next  # Si son iguales, pasa a la siguiente fila
+  #  } else {
+      Var <- Var + 1  # Si no son iguales, incrementa Var
+    }
+  }
+
+# Calcular las proporciones
+  Ntotal <- nrow(Aw_Rf)
+  prop_consang_intergrupal <- Var / Ntotal
+  prop_consang_intragrupal <- (Ntotal - Var) / Ntotal
