@@ -62,10 +62,10 @@ library(dplyr)
 
 library("dplyr")
 # Seleccionar manualmente los individuos de interés
-individuos_seleccionados <- c("MG012.CEL", "MG007.CEL", "MG016.CEL", "MG029.CEL", "MG015.CEL", "MG027.CEL", "MG002.CEL", "MG019.CEL", "MG009.CEL", "MG022.CEL", "MG020.CEL", "MG001.CEL", "MG004.CEL", "MG026.CEL",
-                              "EC021", "EC008", "EC18", "EC013", "EC024", "EC003", "EC022", "EC002", "EC015", "EC012", "EC010", "EC020", "EC005", "EC007", "EC023", "EC006", "EC019",
-                              "AMZ142", "AMZ150", "SMAR-10", "SMAR-9", "AMZ143", "AMZ149", "SMAR-7",
-                             "CH106", "CH116", "CH111", "CH105", "CH109", "CH107", "CH117", "CH112", "CH108", "CH104")
+  individuos_seleccionados <- c("MG012.CEL", "MG007.CEL", "MG016.CEL", "MG029.CEL", "MG015.CEL", "MG027.CEL", "MG002.CEL", "MG019.CEL", "MG009.CEL", "MG022.CEL", "MG020.CEL", "MG001.CEL", "MG004.CEL", "MG026.CEL",
+                                "EC021", "EC008", "EC18", "EC013", "EC024", "EC003", "EC022", "EC002", "EC015", "EC012", "EC010", "EC020", "EC005", "EC007", "EC023", "EC006", "EC019",
+                                "AMZ142", "AMZ150", "SMAR-10", "SMAR-9", "AMZ143", "AMZ149", "SMAR-7",
+                               "CH106", "CH116", "CH111", "CH105", "CH109", "CH107", "CH117", "CH112", "CH108", "CH104")
 
 # Filtrar los datos para incluir solo los individuos seleccionados
   datos_seleccionados <- Eivecdata_RefAwaZ %>%
