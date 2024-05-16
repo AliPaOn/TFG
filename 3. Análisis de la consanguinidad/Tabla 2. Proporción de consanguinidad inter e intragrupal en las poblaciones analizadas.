@@ -1,4 +1,4 @@
-##### 1. OBTENCIÓN DE LOS DATOS DE INDENTIDAD POR DESCENDENCIA #####
+##### 1. OBTENCIÓN DE BASE DE DATOS GENOME #####
 # Bash
 
 # Filtrar individuos de interés en los datos genómicos
@@ -7,7 +7,7 @@
 # Convertir a formato bed
   plink --vcf Awa_Ref.recode.vcf --make-bed --out Awa_Ref
 
-# Obtención tabla de identidad por descendencia
+# Obtención base de datos genome
 plink --bfile Awa_Ref --genome --out GenoAwa_Ref
 
 ##### 2. BASE DE DATOS DE INDENTIDAD POR DESCENDENCIA #####
