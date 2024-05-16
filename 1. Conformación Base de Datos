@@ -59,7 +59,7 @@ write.table(David_BM, "DRdata.txt", quote = F, col.names = F, row.names = F)
 #Bash
 
 # Conversión a formato bed desde directorio
-plink --vcf awajun_16.vcf --make-bed --out awajun
+plink --vcf awajun_16.vcf --make-bed --out Awadata
 plink --vcf fltSouthAmericaATLAS_177ExcludeRelatives_EIGEN.recode.vcf --make-bed --out CBdata
 plink --vcf fltv54.1.p1_HO_public.recode.vcf --make-bed --out DRdata
 
