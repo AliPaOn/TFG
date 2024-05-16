@@ -4,17 +4,17 @@
 # Crear un archivo con la identificación de todos los individuos en formato .txt
 
 # Crear un archivo que indique el directorio de los archivos de entrada y la ubicación para los archivos de salida. Añadir parámetros deseados.
-  genotypename: /home/alu/TFG/Consanguinidad/PCAs_consanguinidad/PCA_refawa_zoom/Inputs_files/Popref_awaZ.bed
-  snpname: /home/alu/TFG/Consanguinidad/PCAs_consanguinidad/PCA_refawa_zoom/Inputs_files/Popref_awaZ.bim
-  indivname: /home/alu/TFG/Consanguinidad/PCAs_consanguinidad/PCA_refawa_zoom/Inputs_files/Popref_awaZ.fam
-  evecoutname: /home/alu/TFG/Consanguinidad/PCAs_consanguinidad/PCA_refawa_zoom/outputs_smartpca/eigenvectors
-  evaloutname: /home/alu/TFG/Consanguinidad/PCAs_consanguinidad/PCA_refawa_zoom/outputs_smartpca/eigenvalues
+  genotypename: /home/alu/TFG/Consanguinidad/PCAs_finales/Consanguinidad/PCA_refawa_zoom/Inputs_files/Popref_awaZ.bed
+  snpname: /home/alu/TFG/Consanguinidad/PCAs_finales/Consanguinidad/PCA_refawa_zoom/Inputs_files/Popref_awaZ.bim
+  indivname: /home/alu/TFG/Consanguinidad/PCAs_finales/Consanguinidad/PCA_refawa_zoom/Inputs_files/Popref_awaZ.fam
+  evecoutname: /home/alu/TFG/Consanguinidad/PCAs_finales/Consanguinidad/PCA_refawa_zoom/outputs_smartpca/eigenvectors
+  evaloutname: /home/alu/TFG/Consanguinidad/PCAs_finales/Consanguinidad/PCA_refawa_zoom/outputs_smartpca/eigenvalues
   numoutlieriter: 0
 
 # Crear un archivo ejecutable para Linux (.sh)
   #!/bin/bash
-  parfile_dir="/home/alu/TFG/Consanguinidad/PCAs_consanguinidad/PCA_refawa_zoom"
-  logfile="/home/alu/TFG/Consanguinidad/PCAs_consanguinidad/PCA_refawa_zoom/outputs_smartpca"
+  parfile_dir="/home/alu/TFG/Consanguinidad/PCAs_finales/Consanguinidad/PCA_refawa_zoom"
+  logfile="/home/alu/TFG/Consanguinidad/PCAs_finales/Consanguinidad/PCA_refawa_zoom/outputs_smartpca"
   smartpca -p $parfile_dir/Popref_awaZ.txt > $logfile/logfile
 
 
