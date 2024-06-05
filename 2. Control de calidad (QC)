@@ -4,7 +4,7 @@ setwd
 # QC 1: SNPs autosómicos (añadir recode para que conserve el formato vcf)
 plink --vcf ACDv.vcf --autosome --recode --out ACVqc1.vcf
 
-# QC 2: Eliminar los sitios polimórficos
+# QC 2: Eliminar los sitios invariantes
 bcftools view -c 1 ACDv.vcf -Ov -o ACDpol.vcf
 
 # QC 3: Filtrar missing values 
